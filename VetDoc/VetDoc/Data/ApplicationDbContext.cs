@@ -12,7 +12,6 @@ namespace VetDoc.Data
         {
         }
 
-        // One DbSet = one table in the database
         public DbSet<Clinic> Clinics { get; set; }
         public DbSet<Vet> Vets { get; set; }
         public DbSet<Pet> Pets { get; set; }
@@ -20,17 +19,13 @@ namespace VetDoc.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // Creates the Identity tables (users, roles, ...)
             base.OnModelCreating(builder);
 
-            // No double booking: one vet cannot have two active appointments at the same time.
-            // Cancelled appointments are not counted, so the time can be booked again.
             builder.Entity<Appointment>()
                 .HasIndex(a => new { a.VetId, a.StartTime })
                 .IsUnique()
                 .HasFilter("[IsCancelled] = 0");
 
-            // A vet or a pet with appointments cannot be deleted (the history stays safe)
             builder.Entity<Appointment>()
                 .HasOne(a => a.Vet)
                 .WithMany(v => v.Appointments)
@@ -48,7 +43,6 @@ namespace VetDoc.Data
             SeedVets(builder);
         }
 
-        // The three roles in the application
         private static void SeedRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>().HasData(
@@ -58,7 +52,6 @@ namespace VetDoc.Data
             );
         }
 
-        // Starting clinics in different cities
         private static void SeedClinics(ModelBuilder builder)
         {
             builder.Entity<Clinic>().HasData(
@@ -70,7 +63,6 @@ namespace VetDoc.Data
             );
         }
 
-        // Starting vets (at least one in every clinic)
         private static void SeedVets(ModelBuilder builder)
         {
             builder.Entity<Vet>().HasData(

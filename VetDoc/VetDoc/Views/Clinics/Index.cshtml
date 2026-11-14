@@ -1,0 +1,23 @@
+@model List<VetDoc.Models.Clinic>
+
+<h2>Клиники</h2>
+
+<table class="table">
+    <tr>
+        <th>Име</th>
+        <th>Град</th>
+        <th>Адрес</th>
+        <th>Телефон</th>
+        <th>Лекари</th>
+    </tr>
+    @foreach (var clinic in Model)
+    {
+        <tr>
+            <td>@clinic.Name</td>
+            <td>@clinic.City</td>
+            <td>@clinic.Address</td>
+            <td>@clinic.Phone</td>
+            <td>@clinic.Vets.Count</td>
+        </tr>
+    }
+</table>
